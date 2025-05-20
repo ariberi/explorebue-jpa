@@ -10,3 +10,6 @@ GET localhost:8080/actuator
 
 ###
 GET localhost:8080/actuator/health
+
+###
+GET localhost:8080/packages
