@@ -5,6 +5,8 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
+import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 
 import dev.ari.explorebuejpa.model.Tour;
@@ -13,6 +15,7 @@ import dev.ari.explorebuejpa.repository.TourRatingRepository;
 import dev.ari.explorebuejpa.repository.TourRepository;
 
 @Service
+@Transactional // Useful for transaction rollbacks on exceptions
 public class TourRatingService {
     private TourRatingRepository tourRatingRepository;
     private TourRepository tourRepository;
@@ -131,6 +134,23 @@ public class TourRatingService {
         List<TourRating> ratings = this.tourRatingRepository.findByTourId(verifyTour(tourId).getId());
         OptionalDouble average = ratings.stream().mapToInt((rating) -> rating.getScore()).average();
         return average.isPresent() ? average.getAsDouble() : null;
+    }
+
+    /**
+     * Service for many customers to give the same score for a service
+     *
+     * @param tourId
+     * @param score
+     * @param customers
+     */
+    public void rateMany(int tourId,  int score, List<Integer> customers) {
+        Tour tour = verifyTour(tourId);
+        for (Integer c : customers) {
+            if (tourRatingRepository.findByTourIdAndCustomerId(tourId, c).isPresent()) {
+                throw new ConstraintViolationException("Unable to create duplicate ratings", null);
+            }
+            tourRatingRepository.save(new TourRating(tour, c, score));
+        }
     }
 
     /**
