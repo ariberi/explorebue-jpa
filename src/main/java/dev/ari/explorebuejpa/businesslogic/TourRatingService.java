@@ -12,11 +12,6 @@ import dev.ari.explorebuejpa.model.TourRating;
 import dev.ari.explorebuejpa.repository.TourRatingRepository;
 import dev.ari.explorebuejpa.repository.TourRepository;
 
-/**
- * Tour Rating Service
- *
- * Created by Mary Ellen Bowman.
- */
 @Service
 public class TourRatingService {
     private TourRatingRepository tourRatingRepository;
@@ -108,8 +103,8 @@ public class TourRatingService {
     public TourRating updateSome(int tourId, Integer customerId, Optional<Integer> score, Optional<String> comment)
             throws NoSuchElementException {
         TourRating rating = verifyTourRating(tourId, customerId);
-        score.ifPresent(s ->rating.setScore(s));
-        comment.ifPresent(c -> rating.setComment(c));
+        score.ifPresent(rating::setScore);
+        comment.ifPresent(rating::setComment);
         return this.tourRatingRepository.save(rating);
     }
 
