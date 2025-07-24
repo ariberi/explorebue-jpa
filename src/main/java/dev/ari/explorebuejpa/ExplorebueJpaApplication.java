@@ -43,11 +43,11 @@ public class ExplorebueJpaApplication implements CommandLineRunner {
         System.out.println("Persisted Tours = " + tourService.total());
 
         /********* CHALLENGES **********/
-        System.out.println("\n\nEasy Tours");
-        tourService.lookupByDifficulty(Difficulty.Easy).forEach(System.out::println);
-
-        System.out.println("\n\nUrban BA Tours");
-        tourService.lookupByPackage("UB").forEach(System.out::println);
+//        System.out.println("\n\nEasy Tours");
+//        tourService.lookupByDifficulty(Difficulty.Easy).forEach(System.out::println);
+//
+//        System.out.println("\n\nUrban BA Tours");
+//        tourService.lookupByPackage("UB").forEach(System.out::println);
     }
 
     /**
@@ -63,8 +63,6 @@ public class ExplorebueJpaApplication implements CommandLineRunner {
         tourPackageService.createTourPackage("NW", "Nature Walks");
         tourPackageService.createTourPackage("FF", "Family Fun");
     }
-
-
 
     /**
      * Create tour entities from an external file
@@ -85,7 +83,6 @@ public class ExplorebueJpaApplication implements CommandLineRunner {
                 )
         );
     }
-
 
     record TourFromFile(String packageName, String title, String description,
                         String blurb, Integer price, String length, String bullets,

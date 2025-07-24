@@ -12,7 +12,7 @@ public interface TourRepository extends JpaRepository<Tour, String> {
 
     List<Tour> findByDifficulty(Difficulty difficulty);
 
-    List<Tour> findByTourPackage_Code(String tourPackageCode);
+    List<Tour> findByTourPackageCode(String tourPackageCode);
 
 
 }
