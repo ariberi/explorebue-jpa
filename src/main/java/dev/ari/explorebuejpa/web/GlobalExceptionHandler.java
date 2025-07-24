@@ -1,6 +1,7 @@
-package dev.ari.explorebuejpa.web;
+package com.example.explorecalijpa.web;
 
 import java.util.NoSuchElementException;
+
 
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import jakarta.validation.ConstraintViolationException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -41,6 +44,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
         return  createResponseEntity(pd, null, HttpStatus.NOT_FOUND, request);
+    }
+
+    /**
+     * Leverage Exception Handler framework for id not found Exception.
+     *
+     * @param ex      NoSuchElementException
+     * @param request WebRequest
+     * @return http response
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public final ResponseEntity<Object> handleConstraintViolationException(
+            ConstraintViolationException ex, WebRequest request) {
+
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return  createResponseEntity(pd, null, HttpStatus.BAD_REQUEST, request);
     }
 
     /**
